@@ -73,10 +73,10 @@ app.post("/chat", async (req, res) => {
 
     // Step 5: Fetch assistant response
     const messages = await openai.beta.threads.messages.list(threadId);
-    const response = messages.data
-      .filter((m) => m.role === "assistant")
-      .map((m) => m.content?.[0]?.text?.value)
-      .join("\n");
+    const latestMessage = messages.data.find((m) => m.role === "assistant");
+
+    const response =
+      latestMessage?.content?.[0]?.text?.value || "Something went wrong 😿";
 
     // ✅ Return both the reply and the threadId
     res.json({ message: response, threadId });
