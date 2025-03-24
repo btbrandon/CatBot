@@ -1,0 +1,14 @@
+# Ignore node modules
+node_modules/
+
+# Ignore env files
+.env
+
+# Build output (React)
+frontend/build/
+
+# Log files
+*.log
+
+# System files
+.DS_Store
