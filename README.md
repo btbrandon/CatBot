@@ -7,12 +7,14 @@ CatBot is a fun, friendly chatbot designed to boost motivation and spark joy for
 ## 🚀 Tech Stack
 
 ### 🖥️ Frontend
+
 - **React.js**
 - **Axios** — for HTTP requests to the backend
 - **CSS** — custom chat UI
 - **localStorage** — to store `threadId` and maintain memory between refreshes
 
 ### ⚙️ Backend
+
 - **Node.js**
 - **Express.js** — REST API routing
 - **dotenv** — manages API keys via `.env` file
@@ -45,6 +47,7 @@ CatBot is a fun, friendly chatbot designed to boost motivation and spark joy for
 ## 📋 To-Do
 
 ### 🔧 Functionality
+
 - [ ] **CatAPI Integration**
   - Triggered by OpenAI function calling
   - Support custom breeds & multiple image requests
@@ -53,6 +56,7 @@ CatBot is a fun, friendly chatbot designed to boost motivation and spark joy for
 - [ ] (Optional) Login system with persistent threads via Supabase/Firebase
 
 ### 🎨 UI/UX Improvements
+
 - [ ] Limit message bubble **width** to ~60–70% of screen
 - [ ] Use full **vertical space** on page
 - [ ] Add **timestamps** to each message
@@ -97,7 +101,7 @@ Create a `.env`:
 
 ```env
 OPENAI_API_KEY=sk-...
-CAT_API_KEY=live_... # optional
+CAT_API_KEY=live_...
 ```
 
 Start the server:
@@ -134,6 +138,6 @@ Bot: You’ve got this, Brandon! 💪🌍 Every action at Nika adds up to a bett
 
 ## 👨‍💻 Author
 
-Made with love (and paws 🐾) by **Brandon**  
+Made by **Brandon**  
 Built for the incredible team at [Nika.eco](https://www.nikaplanet.com/carbon)  
 🐱🌿 Inspiring change — one cheerful chat at a time.
