@@ -1,21 +1,31 @@
 import React from "react";
 import ReactMarkdown from "react-markdown";
 import "../styles/ChatWindow.css";
+import { useEffect, useRef } from "react";
 
 function ChatWindow({ messages, loading }) {
+  const bottomRef = useRef(null);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, loading]);
+
   return (
     <div className="chat-window">
       {messages.map((msg, index) => (
         <div key={index} className={`chat-message ${msg.sender}`}>
-          {msg.sender === "cat" ? (
-            <img src={msg.content} alt="Cat" className="cat-image" />
-          ) : (
-            <div className="message-bubble">
+          <div className="message-bubble">
+            {msg.sender === "cat" ? (
+              <div className="cat-image-wrapper">
+                <img src={msg.content} alt="Cat" className="cat-image" />
+              </div>
+            ) : (
               <ReactMarkdown>{msg.content}</ReactMarkdown>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       ))}
+
       {loading && (
         <div className="chat-message bot">
           <div className="message-bubble typing-indicator">
@@ -25,6 +35,8 @@ function ChatWindow({ messages, loading }) {
           </div>
         </div>
       )}
+
+      <div ref={bottomRef} />
     </div>
   );
 }
