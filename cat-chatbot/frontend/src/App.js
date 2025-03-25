@@ -12,6 +12,8 @@ function App() {
   const [loading, setLoading] = useState(false);
 
   const sendMessage = async (message) => {
+    if (loading) return;
+    // immediately add the user's message to the conversation
     setMessages((prev) => [...prev, { sender: "user", content: message }]);
     setLoading(true);
 
@@ -21,6 +23,7 @@ function App() {
         threadId,
       });
 
+      // for the first message in a conversation
       if (response.data.threadId && !threadId) {
         setThreadId(response.data.threadId);
         localStorage.setItem("threadId", response.data.threadId);
@@ -43,19 +46,21 @@ function App() {
 
   return (
     <div className="app-container">
-      <h1 className="chat-title">🐾 CatBot</h1>
+      <div className="header">
+        <h1 className="chat-title">CatBot 🐾</h1>
+        <button
+          className="reset-button"
+          onClick={() => {
+            setThreadId(null);
+            localStorage.removeItem("threadId");
+            setMessages([]);
+          }}
+        >
+          Reset Chat
+        </button>
+      </div>
       <ChatWindow messages={messages} loading={loading} />
-      <ChatInput sendMessage={sendMessage} />
-      <button
-        className="reset-button"
-        onClick={() => {
-          setThreadId(null);
-          localStorage.removeItem("threadId");
-          setMessages([]);
-        }}
-      >
-        Reset Chat
-      </button>
+      <ChatInput sendMessage={sendMessage} disabled={loading} />
     </div>
   );
 }

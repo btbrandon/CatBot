@@ -1,24 +1,36 @@
-.chat-input {
+/* Wrapper to center the input */
+.chat-input-container {
+  width: 100%;
   display: flex;
+  justify-content: center;
   margin-top: 1rem;
 }
 
+/* Input row (input + button) */
+.chat-input {
+  width: 60%; /* 👈 this controls the total width */
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Input box */
 .chat-input input {
-  flex-grow: 1;
-  padding: 10px;
-  border-radius: 6px 0 0 6px;
+  flex: 1;
+  padding: 0.75rem;
+  border-radius: 6px;
   border: 1px solid #ccc;
   font-size: 1rem;
 }
 
+/* Send button */
 .chat-input button {
-  padding: 10px 16px;
   background-color: #2e7d32;
   color: white;
+  padding: 0.75rem 1rem;
   border: none;
-  border-radius: 0 10px 10px 0;
+  border-radius: 6px;
+  font-size: 1rem;
   cursor: pointer;
-  font-weight: bold;
 }
 
 .chat-input button:hover {
