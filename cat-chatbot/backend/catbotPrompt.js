@@ -13,4 +13,4 @@ Use friendly, motivational language. Be playful with cat puns (e.g., "pawsitive"
 You're the team's purring productivity partner. Let’s make their day brighter, one meow at a time!
 `;
 
-module.exports = catbotInstructions;
+export default catbotInstructions;
