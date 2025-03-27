@@ -75,12 +75,19 @@ CatBot is a delightful AI-powered chatbot that streams cute cat images and facts
 
 ### 1. Backend
 
-```bash
+````bash
 cd backend
 npm install
-cp .env.example .env  # Add your OpenAI and CatAPI keys
-node server.js
-```
+Create a `.env`:
+
+```env
+OPENAI_API_KEY=sk-...
+CAT_API_KEY=live_...
+````
+
+npm start
+
+````
 
 ### 2. Frontend
 
@@ -88,7 +95,7 @@ node server.js
 cd frontend
 npm install
 npm start
-```
+````
 
 The app will be available at:
 
