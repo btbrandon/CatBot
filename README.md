@@ -1,116 +1,88 @@
-# 🐾 CatBot — Your Cheerful Nika Companion
+# 🐾 CatBot – The Purrfect Chat Companion
 
-CatBot is a fun, friendly chatbot designed to boost motivation and spark joy for the amazing team at [Nika.eco](https://www.nikaplanet.com/carbon). Built using OpenAI's Assistants API and React, CatBot remembers your chats and even fetches cute cats (coming soon 🐱)!
+CatBot is a delightful AI-powered chatbot that streams cute cat images and facts in real-time! Built with OpenAI's Assistant API and TheCatAPI, you can chat with CatBot and ask for specific breeds, request multiple images, and enjoy a smooth, persistent conversation experience.
 
 ---
 
-## 🚀 Tech Stack
+## ✅ Features
+
+- 💬 **Conversational Chat** with OpenAI Assistant API (`gpt-4o-mini`)
+- 📷 **Cat Images on Demand** – Powered by TheCatAPI
+- 🐈‍⬛ **Supports Specific Breeds** – e.g., "Show me a Siamese cat"
+- 🖼️ **Multiple Image Support** – Ask for more than one image!
+- ⚡ **Streaming Response Support** – Instant typing feedback and incremental loading
+- 💾 **Persistent Threads** using `localStorage` (continue where you left off after refresh!)
+
+---
+
+## 🧑‍💻 Tech Stack
 
 ### 🖥️ Frontend
 
 - **React.js**
-- **Axios** — for HTTP requests to the backend
-- **CSS** — custom chat UI
-- **localStorage** — to store `threadId` and maintain memory between refreshes
+- **Axios** – For communicating with the backend
+- **CSS** – For styling the chat interface
+- **localStorage** – Stores `threadId` and messages for persistence
 
 ### ⚙️ Backend
 
 - **Node.js**
-- **Express.js** — REST API routing
-- **dotenv** — manages API keys via `.env` file
+- **Express.js** – API routing
+- **dotenv** – Securely manages environment variables (e.g., API keys)
+- **OpenAI Assistant API** – Handles assistant logic and tool calling
+- **TheCatAPI** – Source of all adorable cat images
 
 ---
 
-## 🔐 API Key & Credential Security
+## 🔒 Security
 
-- `.env` file stores secrets like OpenAI and CatAPI keys
-- Keys are accessed server-side using `dotenv`
-- **Never exposed to frontend**
-- `.gitignore` ensures `.env` is not tracked by Git
+- API Keys are stored safely in a `.env` file and **never exposed to the frontend**
+- `.gitignore` ensures `.env` is never committed to Git
 
 ---
 
-## 💡 Features
-
-- ✅ Persistent memory using OpenAI **Assistant + Thread API**
-- ✅ `threadId` stored in localStorage to resume chats after refresh
-- ✅ Chat bubbles with:
-  - Bot messages on **left** (light green)
-  - User messages on **right** (dark green)
-- ✅ Typing indicator while waiting for response
-- ✅ Reset Chat button
-- ✅ Markdown rendering for nicer formatting
-- ✅ Cute, motivating, climate-conscious cat messages 😺🌱
-
----
-
-## 📋 To-Do
-
-### 🔧 Functionality
-
-- [ ] **CatAPI Integration**
-  - Triggered by OpenAI function calling
-  - Support custom breeds & multiple image requests
-- [ ] Store & restore **chat history** from memory
-- [ ] Support multiple chat threads per user (advanced)
-- [ ] (Optional) Login system with persistent threads via Supabase/Firebase
-
-### 🎨 UI/UX Improvements
-
-- [ ] Limit message bubble **width** to ~60–70% of screen
-- [ ] Use full **vertical space** on page
-- [ ] Add **timestamps** to each message
-- [ ] Improve layout on smaller screens (responsive)
-- [ ] Optional: **Dark mode toggle**
-
----
-
-## 📦 Folder Structure
+## 📂 File Overview
 
 ```
-CatBot/
-├── backend/
-│   ├── server.js
-│   ├── .env
-│   └── catbotPrompt.js
-├── frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── ChatWindow.js
-│   │   │   ├── ChatInput.js
-│   │   ├── App.js
-│   │   ├── App.css
-│   │   ├── styles/
-│   │   │   ├── ChatWindow.css
-│   │   │   └── ChatInput.css
-├── .gitignore
+/backend
+  ├── server.js                # Express server
+  ├── services/
+  │   └── assistantService.js  # Handles chat, streaming, and tool calling
+  ├── functions/
+  │   └── getCatImage.js       # Fetches cat images from TheCatAPI
+  └── catbotPrompt.js          # Custom assistant instructions
+
+/frontend
+  ├── components/
+  │   ├── ChatInput.js
+  │   └── ChatWindow.js
+  ├── App.js
+  └── styles/
+      └── App.css, ChatWindow.css, ChatInput.css
 ```
 
 ---
 
-## 🛠️ Setup Instructions
+## 🐞 Known Bugs
 
-### 🔧 Backend Setup
+- 🔄 Chat only scrolls to the **start** of new messages (not entire message)
+- 🧱 Occasional weird **spacing issues**
+- 📋 Bullet points may **format incorrectly**
+
+---
+
+## 🚀 Running the Project
+
+### 1. Backend
 
 ```bash
 cd backend
 npm install
-```
-
-Create a `.env`:
-
-```env
-OPENAI_API_KEY=sk-...
-CAT_API_KEY=live_...
-```
-
-Start the server:
-
-```bash
+cp .env.example .env  # Add your OpenAI and CatAPI keys
 node server.js
 ```
 
-### 💻 Frontend Setup
+### 2. Frontend
 
 ```bash
 cd frontend
@@ -127,12 +99,17 @@ Backend:  http://localhost:5001
 
 ---
 
-## ✨ Demo Prompt
+## 💡 Example Prompts to Try
 
-```vbnet
-User: Hey CatBot! I need a boost 😿
-Bot: You’ve got this, Brandon! 💪🌍 Every action at Nika adds up to a better world. Want to see a cat for motivation? 😺
-```
+- "Show me a cat"
+- "Can I see 5 Persian cats?"
+- "Tell me a fun cat fact"
+
+---
+
+## 📬 Feedback
+
+Issues? Suggestions? Feature ideas? Open a GitHub issue or contact us!
 
 ---
 
