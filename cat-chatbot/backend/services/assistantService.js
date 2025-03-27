@@ -83,7 +83,6 @@ export async function handleMessage(threadId, message) {
   const messages = await openai.beta.threads.messages.list(thread);
   const latestMessage = messages.data.find((m) => m.role === "assistant");
 
-  // Parse tool output if available
   let reply = "Something went wrong 😿";
   if (latestMessage?.content?.[0]?.text?.value) {
     reply = latestMessage.content[0].text.value;
@@ -92,7 +91,7 @@ export async function handleMessage(threadId, message) {
     latestMessage.content[0].tool_use?.output
   ) {
     const parsed = JSON.parse(latestMessage.content[0].tool_use.output);
-    if (parsed.imageUrls?.length) reply = parsed.imageUrls[0]; // could return array
+    if (parsed.imageUrls?.length) reply = parsed.imageUrls;
   }
 
   return {
@@ -123,9 +122,13 @@ export async function handleMessageStream(threadId, message, onDelta) {
       const contents = event.data.delta?.content || [];
 
       for (const part of contents) {
-        if (part.type === "text" && part.text?.value) {
+        if (
+          part.type === "text" &&
+          part.text?.value &&
+          !part.text.value.includes("json{")
+        ) {
           fullText += part.text.value;
-          onDelta(part.text.value); // ✅ append only actual text
+          onDelta(part.text.value);
         }
       }
     }
@@ -134,31 +137,29 @@ export async function handleMessageStream(threadId, message, onDelta) {
       const toolCalls =
         event.data.required_action.submit_tool_outputs.tool_calls;
 
+      const tool_outputs = [];
+
       for (const toolCall of toolCalls) {
         if (toolCall.function.name === "getCatImage") {
           const args = JSON.parse(toolCall.function.arguments);
           const imageUrls = await getCatImage(args);
-          await openai.beta.threads.runs.submitToolOutputs(
-            thread,
-            event.data.id,
-            {
-              tool_outputs: [
-                {
-                  tool_call_id: toolCall.id,
-                  output: JSON.stringify({ imageUrls }),
-                },
-              ],
-            }
-          );
 
-          // Stream images as plain text
-          if (imageUrls.length) {
-            const imgText = "\n" + imageUrls.join("\n") + "\n";
-            fullText += imgText;
-            onDelta(imgText);
+          tool_outputs.push({
+            tool_call_id: toolCall.id,
+            output: JSON.stringify({ imageUrls }),
+          });
+
+          for (const url of imageUrls) {
+            const formatted = `\n${url}\n`;
+            fullText += formatted;
+            onDelta(formatted);
           }
         }
       }
+
+      await openai.beta.threads.runs.submitToolOutputs(thread, event.data.id, {
+        tool_outputs,
+      });
     }
   }
 

@@ -19,6 +19,10 @@ function App() {
     localStorage.setItem("messages", JSON.stringify(messages));
   }, [messages]);
 
+  const isImageUrl = (str) =>
+    typeof str === "string" &&
+    /^https?:\/\/.*\.(jpg|jpeg|png|gif|webp)$/i.test(str.trim());
+
   const sendMessage = async (message) => {
     if (loading) return;
 
@@ -50,55 +54,40 @@ function App() {
         minute: "2-digit",
       });
 
-      let botContent = "";
+      let streamedText = "";
+      const streamedImages = [];
+
       setMessages((prev) => [
         ...prev,
         { sender: "bot", content: "", time: botTime },
       ]);
+
+      setLoading(false);
 
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
 
         if (value) {
-          botContent += value;
+          const newLines = value.split("\n").filter(Boolean);
+          const newImages = newLines.filter(isImageUrl);
+          const newTextLines = newLines.filter((line) => !isImageUrl(line));
+
+          streamedText += newTextLines.join("\n");
+
+          streamedImages.push(...newImages);
+
           setMessages((prev) => {
             const updated = [...prev];
             updated[updated.length - 1] = {
               ...updated[updated.length - 1],
-              content: botContent,
+              content: [streamedText.trim(), ...streamedImages],
+              time: botTime,
             };
             return updated;
           });
         }
       }
-
-      const isImageUrl = (str) =>
-        typeof str === "string" &&
-        /^https?:\/\/.*\.(jpg|jpeg|png|gif|webp)$/i.test(str.trim());
-
-      let finalContent;
-      try {
-        const parsed = JSON.parse(botContent);
-        if (Array.isArray(parsed) && parsed.every(isImageUrl)) {
-          finalContent = parsed;
-        } else {
-          finalContent = botContent;
-        }
-      } catch {
-        const chunks = botContent.split("\n").filter(Boolean);
-        const isAllImages = chunks.every((chunk) => isImageUrl(chunk));
-        finalContent = isAllImages ? chunks : botContent;
-      }
-
-      setMessages((prev) => {
-        const updated = [...prev];
-        updated[updated.length - 1] = {
-          ...updated[updated.length - 1],
-          content: finalContent,
-        };
-        return updated;
-      });
 
       const newThreadId = localStorage.getItem("threadId");
       if (!threadId && newThreadId) {
@@ -110,8 +99,6 @@ function App() {
         ...prev,
         { sender: "bot", content: "Something went wrong 🐾" },
       ]);
-    } finally {
-      setLoading(false);
     }
   };
 

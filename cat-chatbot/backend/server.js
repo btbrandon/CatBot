@@ -34,13 +34,8 @@ app.post("/chat/stream", async (req, res) => {
     res.setHeader("Content-Type", "text/plain; charset=utf-8");
     res.setHeader("Transfer-Encoding", "chunked");
 
-    let finalThreadId = null;
-
     await handleMessageStream(threadId, message, (delta) => {
-      // Explicitly write each delta followed by a newline
       res.write(delta + "\n");
-    }).then((thread) => {
-      finalThreadId = thread;
     });
 
     res.end();

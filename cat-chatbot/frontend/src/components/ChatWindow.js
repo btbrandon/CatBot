@@ -48,11 +48,7 @@ function ChatWindow({ messages, loading }) {
           <div key={index} className={`chat-message ${msg.sender}`}>
             <div className="message-bubble">
               {renderContent(msg.content)}
-              {msg.time &&
-                msg.sender !== "cat" &&
-                typeof msg.content === "string" && (
-                  <span className="timestamp">{msg.time}</span>
-                )}
+              {msg.time && <span className="timestamp">{msg.time}</span>}
             </div>
           </div>
         ) : null;
